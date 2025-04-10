@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -31,19 +30,19 @@ func main() {
 		panic(err)
 	}
 
-	queues, err := getRabbitMQqueues(rmqc)
+	queues, err := getRabbitMQQueues(rmqc)
 	if err != nil {
 		log.Fatalf("Unable to create RabbitMQ client: %s\n", err)
 		panic(err)
 	}
 	for _, queue := range *queues {
-		log.Printf("Queue: %s, Node: %s\n", queue.Name, queue.Node)
+		log.Printf("Queue: %s, Status: %s\n", queue.Name, queue.Status)
 	}
 	log.Printf("Finished.")
 }
 
 func createRabbitMQClient(endpoint, user, pass string) (*rabbithole.Client, error) {
-	fmt.Println("Creating RabbitMQ client")
+	log.Println("Creating new RabbitMQ client")
 	client, err := rabbithole.NewClient(endpoint, user, pass)
 	if err != nil {
 		log.Fatalf("Error creating RabbitMQ client: %s\n", err)
@@ -52,8 +51,8 @@ func createRabbitMQClient(endpoint, user, pass string) (*rabbithole.Client, erro
 	return client, nil
 }
 
-func getRabbitMQqueues(client *rabbithole.Client) (*[]rabbithole.QueueInfo, error) {
-	fmt.Println("Getting RabbitMQ queues")
+func getRabbitMQQueues(client *rabbithole.Client) (*[]rabbithole.QueueInfo, error) {
+	log.Printf("Getting RabbitMQ queues in %s\n", client.Endpoint)
 	var queues []rabbithole.QueueInfo
 	queues, err := client.ListQueues()
 	if err != nil {
