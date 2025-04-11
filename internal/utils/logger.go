@@ -1,17 +1,33 @@
 package utils
 
 import (
-	"go.uber.org/zap"
+	"strings"
+
+	"github.com/sirupsen/logrus"
 )
 
-func CreateLogger() *zap.Logger {
-	config := zap.NewProductionConfig()
-	config.Level = zap.NewAtomicLevelAt(zap.DebugLevel)
+func NewLogger(loglevel string) *logrus.Logger {
+	logger := logrus.New()
+	level := strings.ToLower(loglevel)
 
-	logger, err := config.Build()
-	if err != nil {
-		panic(err)
+	switch level {
+	case "panic":
+		logger.SetLevel(logrus.PanicLevel)
+	case "fatal":
+		logger.SetLevel(logrus.FatalLevel)
+	case "error":
+		logger.SetLevel(logrus.ErrorLevel)
+	case "warn":
+		logger.SetLevel(logrus.WarnLevel)
+	case "info":
+		logger.SetLevel(logrus.InfoLevel)
+	case "debug":
+		logger.SetLevel(logrus.DebugLevel)
+	case "trace":
+		logger.SetLevel(logrus.TraceLevel)
+	default:
+		logger.SetLevel(logrus.InfoLevel)
 	}
-	defer logger.Sync()
+
 	return logger
 }

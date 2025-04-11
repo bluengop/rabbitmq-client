@@ -1,4 +1,4 @@
-package rabbit
+package rabbitmq
 
 import (
 	"log"
@@ -7,7 +7,6 @@ import (
 )
 
 func CreateRabbitMQClient(endpoint, user, pass string) (*rabbithole.Client, error) {
-	log.Println("Creating new RabbitMQ client")
 	client, err := rabbithole.NewClient(endpoint, user, pass)
 	if err != nil {
 		log.Fatalf("Error creating RabbitMQ client: %s\n", err)
@@ -17,7 +16,6 @@ func CreateRabbitMQClient(endpoint, user, pass string) (*rabbithole.Client, erro
 }
 
 func GetRabbitMQQueues(client *rabbithole.Client) (*[]rabbithole.QueueInfo, error) {
-	log.Printf("Getting RabbitMQ queues in %s\n", client.Endpoint)
 	var queues []rabbithole.QueueInfo
 	queues, err := client.ListQueues()
 	if err != nil {
